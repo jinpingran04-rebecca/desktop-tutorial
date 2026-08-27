@@ -433,9 +433,62 @@
         <div class="tag2">可拖动旋转，免费预览</div>
       </div>
       <p class="hint">这是你的归处，缩小成掌心可安放的形状。付费定制实体作品，交由品牌手工匠造。</p>
+
+      <div class="panel" onclick="go('CFrag')" style="cursor:pointer; display:flex; gap:12px; align-items:center; border-color:var(--ink);">
+        <svg width="34" height="34"><use href="#i-jar"/></svg>
+        <div style="flex:1;">
+          <b style="font-size:13px;">加购 · 记忆碎片组</b>
+          <div class="hint" style="margin:4px 0 0;">从这段记忆里，再挑出5个具体片段，各做一块随身扩香石</div>
+        </div>
+        <span style="color:#a39d8e;">›</span>
+      </div>
+
       <button class="btn" onclick="go('C9')">继续</button>
     </div>
     <div class="tabbar" id="tabbar-C8"></div>
+  </div>
+
+  <!-- ============ CFrag 记忆碎片组（加购）============ -->
+  <div class="screen" id="CFrag">
+    <div class="topbar"><div class="back" onclick="goBack()">‹</div><h1>记忆碎片组</h1></div>
+    <div class="content">
+      <div class="eyebrow">加购模块</div>
+      <p style="font-family:'Songti SC',serif; font-size:15px; color:var(--ink); font-weight:700; margin:10px 0 8px; line-height:1.6;">一段记忆里，往往不止一个画面。</p>
+      <p class="hint">记忆碎片，是这段记忆里具体的局部——一片叶子、一段窗框、一滴雨痕。挑出5个这样的片段，各自做成一块可随身携带的小扩香石，和主体作品一起，收进那片黄铜便携片里。</p>
+
+      <div class="panel" style="background:#f2efe8; border:none; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink); font-weight:600;">加购价格</span>
+        <span style="font-family:-apple-system,sans-serif; font-size:15px; color:var(--ink); font-weight:700;">+¥288 / 5块</span>
+      </div>
+
+      <div class="section-label">选择你的5个碎片</div>
+      <div id="frag-grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:20px;"></div>
+
+      <p class="hint" style="text-align:center;">点击空位，描述一个具体的画面</p>
+      <button class="btn" onclick="confirmFrag()">确认加购，共 5 块</button>
+      <button class="btn ghost" style="margin-top:8px;" onclick="go('C9')">暂不加购，先继续</button>
+    </div>
+    <div class="tabbar" id="tabbar-CFrag"></div>
+  </div>
+
+  <!-- ============ CFragEdit 描述单个碎片 ============ -->
+  <div class="screen" id="CFragEdit">
+    <div class="topbar"><div class="back" onclick="goBack()">‹</div><h1 id="frag-edit-title">描述这块记忆</h1></div>
+    <div class="content">
+      <p class="hint">不用写完整的故事，一个具体的画面就够了——比如"窗台上那盆没浇过水的绿萝"。</p>
+      <textarea id="frag-input" class="compose" style="width:100%; border:1.4px solid var(--line); font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink); resize:none;" rows="4" placeholder="写下这个具体的画面……"></textarea>
+      <div class="section-label">或直接选一个</div>
+      <div class="chiprow">
+        <div class="chip" onclick="fillFrag(this)">常春藤叶片</div>
+        <div class="chip" onclick="fillFrag(this)">老木窗框</div>
+        <div class="chip" onclick="fillFrag(this)">墙面雨痕</div>
+        <div class="chip" onclick="fillFrag(this)">缠绕藤蔓</div>
+        <div class="chip" onclick="fillFrag(this)">橙花一朵</div>
+        <div class="chip" onclick="fillFrag(this)">石阶一角</div>
+      </div>
+      <button class="btn" onclick="saveFragSlot()">保存这一块</button>
+    </div>
+    <div class="tabbar" id="tabbar-CFragEdit"></div>
   </div>
 
   <!-- ============ C9 分叉选择 ============ -->
@@ -1199,7 +1252,7 @@ function buildTabbar(activeRoot){
   return html;
 }
 const ROOT_OF = {
-  H1:'H1', C1:'C1', C4:'C1', C3:'C1', C7:'C1', C8:'C1', C9:'C1',
+  H1:'H1', C1:'C1', C4:'C1', C3:'C1', C7:'C1', C8:'C1', C9:'C1', CFrag:'C1', CFragEdit:'C1',
   W1:'W1', W9:'W1', W1empty:'W1', W2a:'W1', W2b:'W1', W2c:'W1', W2d:'W1', W2e:'W1', W3:'W1',
   S1:'S1', S2:'S1', S4:'S1', S5:'S1',
   M0:'M0', M1:'M0', M2:'M0', M3:'M0', M4:'M0', M4chat:'M0', M5:'M0', M6:'M0', M0edit:'M0', M0posts:'M0',
@@ -1262,6 +1315,56 @@ function tab2(el){
     });
   }
 }
+// ---------- 记忆碎片组（加购模块）----------
+let fragSlots = ['常春藤叶片', '老木窗框', '', '', ''];
+let fragCurrentIndex = 0;
+
+function renderFragGrid(){
+  const grid = document.getElementById('frag-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  fragSlots.forEach((val, i)=>{
+    const cell = document.createElement('div');
+    if(val){
+      cell.style.cssText = 'border:1.4px solid var(--ink); border-radius:3px; padding:14px 8px; text-align:center; cursor:pointer; background:var(--card);';
+      cell.innerHTML = `<svg width="22" height="22" style="margin-bottom:6px;"><use href="#i-jar"/></svg><div style="font-family:-apple-system,sans-serif; font-size:11px; color:var(--ink); line-height:1.4;">${val}</div>`;
+    } else {
+      cell.style.cssText = 'border:1.4px dashed var(--line); border-radius:3px; padding:14px 8px; text-align:center; cursor:pointer; color:#a39d8e;';
+      cell.innerHTML = `<svg width="20" height="20" style="margin-bottom:6px;"><use href="#i2-craft"/></svg><div style="font-family:-apple-system,sans-serif; font-size:11px;">第 ${i+1} 块<br>点击描述</div>`;
+    }
+    cell.onclick = ()=>openFragSlot(i);
+    grid.appendChild(cell);
+  });
+}
+
+function openFragSlot(i){
+  fragCurrentIndex = i;
+  document.getElementById('frag-edit-title').textContent = '描述第 ' + (i+1) + ' 块记忆';
+  document.getElementById('frag-input').value = fragSlots[i] || '';
+  go('CFragEdit');
+}
+
+function fillFrag(el){
+  document.getElementById('frag-input').value = el.textContent;
+}
+
+function saveFragSlot(){
+  const val = document.getElementById('frag-input').value.trim();
+  fragSlots[fragCurrentIndex] = val || fragSlots[fragCurrentIndex];
+  renderFragGrid();
+  go('CFrag');
+}
+
+function confirmFrag(){
+  const filled = fragSlots.filter(v=>v).length;
+  if(filled < 5){
+    alert('还有 ' + (5-filled) + ' 块记忆没有描述，建议先填满再确认加购。');
+    return;
+  }
+  go('C9');
+}
+
+renderFragGrid();
 </script>
 </body>
 </html>
