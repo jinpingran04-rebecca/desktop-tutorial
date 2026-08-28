@@ -651,10 +651,44 @@
         <h2 style="font-size:18px;">HOME 027，厦门外婆家的窗</h2>
         <div class="meta">浓度：明显·空间：卧室<br>锚点：雨后泥土·偏好：独特的记忆感<br>过敏敏感：无</div>
       </div>
-      <p class="hint">这份简报将交给调香师，作为配方微调的最终依据。接下来，我们会寄出两枚记忆试香盒，请你在家确认。</p>
-      <button class="btn mustard" onclick="go('W1')">返回工坊主页</button>
+      <p class="hint">这份简报将交给调香师，作为配方微调的最终依据。接下来，我们会寄出两枚基于这份简报定制的记忆试香石，请你在家确认。</p>
+      <button class="btn mustard" onclick="go('W4')">继续，试香石下单</button>
     </div>
     <div class="tabbar" id="tabbar-W3"></div>
+  </div>
+
+  <!-- ============ W4 试香盒下单（仅线上定制路径）============ -->
+  <div class="screen" id="W4">
+    <div class="topbar"><div class="back" onclick="goBack()">‹</div><h1>试香石下单</h1></div>
+    <div class="content">
+      <div class="eyebrow">仅线上定制路径</div>
+      <p class="hint" style="margin-top:8px;">这一步只出现在线上定制流程里——到店消费者的试香环节，已经在一层免费完成，不需要再寄送试香盒。</p>
+
+      <div class="panel">
+        <b style="font-size:13px;">两枚记忆试香石</b>
+        <p class="hint" style="margin:8px 0 0;">Sample A · 地方——对应墙体与场景的气味基调<br>Sample B · 人与情绪——对应窗内陪伴与温度的气味基调<br>均按刚生成的调香师简报定制，非现货通用款。</p>
+      </div>
+
+      <div class="panel" style="background:#f2efe8; border:none; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink); font-weight:600;">试香石本身</span>
+        <span style="font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink);">免费</span>
+      </div>
+      <div class="panel" style="background:#f2efe8; border:none; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink); font-weight:600;">运费</span>
+        <span style="font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink);">¥15–25，按地区结算</span>
+      </div>
+
+      <div class="section-label">收货信息</div>
+      <div class="panel" style="padding:14px 16px;"><span style="font-family:-apple-system,sans-serif; font-size:13px; color:#8a7d67;">收件人姓名</span></div>
+      <div class="panel" style="padding:14px 16px;"><span style="font-family:-apple-system,sans-serif; font-size:13px; color:#8a7d67;">手机号码</span></div>
+      <div class="panel" style="padding:14px 16px;"><span style="font-family:-apple-system,sans-serif; font-size:13px; color:#8a7d67;">收货地址</span></div>
+
+      <div style="border-top:1px solid var(--line); padding-top:16px; margin-top:6px;">
+        <p style="font-family:-apple-system,sans-serif; font-size:13px; color:var(--ink); margin-bottom:14px;">试香石免费，预估运费 ¥18</p>
+        <button class="btn mustard" onclick="go('W9')">确认寄送</button>
+      </div>
+    </div>
+    <div class="tabbar" id="tabbar-W4"></div>
   </div>
 
   <!-- ============ W9 工艺日志 ============ -->
@@ -1253,7 +1287,7 @@ function buildTabbar(activeRoot){
 }
 const ROOT_OF = {
   H1:'H1', C1:'C1', C4:'C1', C3:'C1', C7:'C1', C8:'C1', C9:'C1', CFrag:'C1', CFragEdit:'C1',
-  W1:'W1', W9:'W1', W1empty:'W1', W2a:'W1', W2b:'W1', W2c:'W1', W2d:'W1', W2e:'W1', W3:'W1',
+  W1:'W1', W9:'W1', W1empty:'W1', W2a:'W1', W2b:'W1', W2c:'W1', W2d:'W1', W2e:'W1', W3:'W1', W4:'W1',
   S1:'S1', S2:'S1', S4:'S1', S5:'S1',
   M0:'M0', M1:'M0', M2:'M0', M3:'M0', M4:'M0', M4chat:'M0', M5:'M0', M6:'M0', M0edit:'M0', M0posts:'M0',
   O1:'H1', O2a:'H1', O2detail:'H1', O2b:'H1', O2c:'H1', O3:'H1',
